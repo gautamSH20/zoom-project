@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import { connectTo } from "./controllers/socketManger.js";
 import exp from "node:constants";
+import userRoutes from "./routes/userRoutes.js";
 
 const app = express();
 const server = createServer(app);
@@ -13,6 +14,7 @@ app.set("port", process.env.PORT || 8000);
 app.use(cors());
 app.use(express.json({ limit: "40kb" }));
 app.use(express.urlencoded({ limit: "40kb", extended: true }));
+app.use("/api/v1/users", userRoutes);
 
 app.get("/home", (req, res) => {
   res.json({
