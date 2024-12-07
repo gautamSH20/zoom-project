@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import { connectTo } from "./controllers/socketManger.js";
 import exp from "node:constants";
+import { mongoId } from "./secret.js";
 import userRoutes from "./routes/userRoutes.js";
 
 const app = express();
@@ -23,9 +24,7 @@ app.get("/home", (req, res) => {
 });
 
 const initiate = async () => {
-  const connectionDb = await mongoose.connect(
-    "mongodb+srv://gs841400:WiREiWwa9IiAWJ9o@cluster0.6eh78.mongodb.net/"
-  );
+  const connectionDb = await mongoose.connect(mongoId());
   console.log(`${connectionDb.connection.host}`);
   server.listen(app.get("port"), (req, res) => {
     console.log("working");
