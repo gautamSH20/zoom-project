@@ -1,42 +1,51 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+.loadingContainer {
+  height: 100vh;
+  width: auto;
+  background-image: url("../public/background.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: aliceblue;
+}
+.loadingContainer nav {
+  margin-inline: 1.2rem;
+  padding-block: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.loadingContainer nav h2 {
+  font-size: 1.8rem;
+  font-weight: 500;
+}
+.loadingContainer nav .navList {
+  display: flex;
+  gap: 40px;
+  cursor: pointer;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+.loadingMainContainer {
+  display: flex;
+  align-items: center;
+  padding-inline: 3rem;
+  height: 80vh;
+  justify-content: space-between;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+.loadingMainContainer div:nth-child(1) {
+  font-size: 2rem;
 }
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.loadingMainContainer div:nth-child(1) div[role="button"] {
+  background: #0c5ef8;
+  width: fit-content;
+  padding: 1rem;
+  color: aliceblue;
+  border-radius: 20px;
+  margin-top: 1.9rem;
 }
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.loadingMainContainer div:nth-child(1) div[role="button"] a {
+  text-decoration: none;
+  color: white;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+.loadingMainContainer div:nth-child(2) img {
+  height: 70vh;
+  width: auto;
 }
