@@ -5,6 +5,7 @@ let timeOnline = {};
 export const connectTo = (server) => {
   const io = new Server(server, {
     cors: {
+      //only during testing not in production
       origin: "*",
       methods: ["GET", "POST"],
       allowedHeaders: ["*"],
