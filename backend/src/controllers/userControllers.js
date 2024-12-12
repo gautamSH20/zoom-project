@@ -40,7 +40,8 @@ const login = async (req, res) => {
         .status(httpStatus.NOT_FOUND)
         .json({ message: "User Not Found" });
     }
-    if (bcrypt.compare(password, user.password)) {
+    const isPassword = await bcrypt.compare(password, user.password);
+    if (isPassword) {
       let token = crypto.randomBytes(20).toString("hex");
       user.token = token;
       await user.save();
@@ -54,6 +55,8 @@ const login = async (req, res) => {
       //     }
       //   }, 2000);
       return res.status(httpStatus.OK).json({ token: token });
+    } else {
+      return res.status(httpStatus.UNAUTHORIZED).json({ message: "Invalid" });
     }
   } catch (e) {
     return res.status(500).json({ message: `something went wrong ${e}` });
