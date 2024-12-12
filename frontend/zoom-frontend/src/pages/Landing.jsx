@@ -22,7 +22,7 @@ export default function LandingPage() {
           </h1>
           <p>Make call more real and connecting</p>
           <div role="button">
-            <Link to={"/home"}>Get Started</Link>
+            <Link to={"/auth"}>Get Started</Link>
           </div>
         </div>
         <div>
