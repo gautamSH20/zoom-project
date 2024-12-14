@@ -1,4 +1,5 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { TextField, Button } from "@mui/material";
 var connections = {};
 const peerConfigConnections = {
   iceServers: [
@@ -27,5 +28,72 @@ export default function VideoMeet() {
 
   const videoRef = useRef([]);
 
-  return <div>{askForUsername === true ? <div></div> : <></>}</div>;
+  const getPermission = async () => {
+    try {
+      //video permission
+      const videoPermisson = await navigator.mediaDevices.getUserMedia({
+        video: true,
+      });
+      if (videoPermisson) {
+        setVideoAvailabel(true);
+      } else {
+        setVideoAvailabel(false);
+      }
+      //AUDIO PERMISSION
+      const audioPermisson = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+      });
+      if (audioPermisson) {
+        setAudioAvailable(true);
+      } else {
+        setAudioAvailable(false);
+      }
+      // TO ALLOW THE SCREEN SHAREING
+      if (navigator.mediaDevices.getDisplayMedia) {
+        setScreenAvailable(true);
+      } else {
+        setScreenAvailable(false);
+      }
+
+      if (audioAvailable || videoAvailabel) {
+        const userMediaStream = await navigator.mediaDevices.getUserMedia({
+          video: videoAvailabel,
+          audio: audioAvailable,
+        });
+        if (userMediaStream) {
+          window.localStream = userMediaStream;
+          if (localVideoRef.current) {
+            localVideoRef.current.srcObject = userMediaStream;
+          }
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    getPermission();
+  }, []);
+  return (
+    <div>
+      {askForUsername === true ? (
+        <div>
+          <h2> Enter the loby</h2>
+          <TextField
+            id="outlined-basic"
+            label="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            variant="outlined"
+          />
+          <Button variant="contained">Connect</Button>
+          <div>
+            <video ref={localVideoRef} autoPlay muted></video>
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
+    </div>
+  );
 }
