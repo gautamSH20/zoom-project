@@ -12,7 +12,6 @@ export const connectTo = (server) => {
       credentials: true,
     },
   });
-
   io.on("connection", (socket) => {
     socket.on("join-call", (path) => {
       if (connections[path] === undefined) {
