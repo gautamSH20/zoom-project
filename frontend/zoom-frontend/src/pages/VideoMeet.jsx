@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { TextField, Button } from "@mui/material";
+import io from "socket.io-client";
+
+const server_url = "http://localhost:8000";
 var connections = {};
 const peerConfigConnections = {
   iceServers: [
@@ -74,6 +77,50 @@ export default function VideoMeet() {
   useEffect(() => {
     getPermission();
   }, []);
+
+  let getUserSuccess = (straem) => {};
+
+  let getUserMedia = () => {
+    if ((video && videoAvailabel) || (audio && audioAvailable)) {
+      navigator.mediaDevices
+        .getUserMedia({ video: video, audio: audio })
+        .then(getUserSuccess)
+        .then((stream) => {})
+        .catch((e) => {
+          console.log(e);
+        });
+    } else {
+      try {
+        track = localVideoRef.current.srcObject.getTracks();
+        track.forEach((track) => track.stop());
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (video !== undefined && audio !== undefined) {
+      getUserMedia();
+      console.log(audio, video);
+    }
+  }, [audio, video]);
+
+  let connectToSocket = () => {
+    socketRef.current = io.connect(server_url, { secure: false });
+  };
+
+  let getMedia = () => {
+    setAudio(audioAvailable);
+    setVideo(videoAvailabel);
+
+    connectToSocket();
+  };
+
+  let connect = () => {
+    setAskForUsername(false);
+    getMedia();
+  };
   return (
     <div>
       {askForUsername === true ? (
@@ -86,7 +133,9 @@ export default function VideoMeet() {
             onChange={(e) => setUsername(e.target.value)}
             variant="outlined"
           />
-          <Button variant="contained">Connect</Button>
+          <Button variant="contained" onClick={connect}>
+            Connect
+          </Button>
           <div>
             <video ref={localVideoRef} autoPlay muted></video>
           </div>
