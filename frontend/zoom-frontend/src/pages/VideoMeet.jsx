@@ -106,8 +106,11 @@ export default function VideoMeet() {
     }
   }, [audio, video]);
 
+  let gotMessageFromServer = () => {};
+
   let connectToSocket = () => {
     socketRef.current = io.connect(server_url, { secure: false });
+    socketIdRef.current.on("signal", gotMessageFromServer);
   };
 
   let getMedia = () => {
