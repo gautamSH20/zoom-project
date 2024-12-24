@@ -19,7 +19,7 @@ export const connectTo = (server) => {
         connections[path] = [];
       }
       connections[path].push(socket.id);
-      timeOnline[socket.io] = new Date();
+      timeOnline[socket.id] = new Date();
 
       for (let a = 0; a < connections[path].length; a++) {
         io.to(connections[path][a]).emit(
@@ -38,6 +38,16 @@ export const connectTo = (server) => {
           );
         }
       }
+      if (messages[path]) {
+        messages[path].forEach((msg) => {
+          io.to(socket.id).emit(
+            "chat-message",
+            meg.sender,
+            msg.data,
+            msg["socket-id-sender"]
+          );
+        });
+      }
     });
     socket.on("signal", (toId, message) => {
       io.to(toId).emit("signal", socket.id, message);
@@ -46,14 +56,14 @@ export const connectTo = (server) => {
     socket.on("chat-message", (data, sender) => {
       const [matchingRoom, found] = Object.entries(connections).reduce(
         ([room, isFound], [roomKey, roomValue]) => {
-          if (!isFound && roomValue.includes(socket.io)) {
+          if (!isFound && roomValue.includes(socket.id)) {
             return [roomKey, true];
           }
           return [room, isFound];
         },
         ["", false]
       );
-      if (isFound === true) {
+      if (found === true) {
         if (messages[matchingRoom] === undefined) {
           messages[matchingRoom] = [];
         }
@@ -81,7 +91,7 @@ export const connectTo = (server) => {
               io.to(connections[key][a]).emit("user-left", socket.id);
             }
             var index = connections[key].indexOf(socket.id);
-            connections[key].splice(index, i);
+            connections[key].splice(index, 1);
 
             if (connections[key].length === 0) {
               delete connections[key];
