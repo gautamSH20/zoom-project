@@ -92,7 +92,7 @@ export default function VideoMeet() {
     for (let id in connections) {
       if (id === socketIdRef.current) continue;
 
-      connections[id].addStream(window.localStream);
+      connections[id].addTrack(window.localStream.getTracks()[0]);
       connections[id].createOffer().then((description) => {
         console.log(description);
         connections[id]
@@ -127,7 +127,7 @@ export default function VideoMeet() {
           localVideoRef.current.srcObject = window.localStream;
 
           for (let id in connections) {
-            connections[id].addStream(window.localStream);
+            connections[id].addTrack(window.localStream.getTracks()[0]);
 
             connections[id]
               .createOffer()
@@ -199,7 +199,7 @@ export default function VideoMeet() {
   }, [audio, video]);
 
   let gotMessageFromServer = (formId, message) => {
-    var signal = JSON.parce(message);
+    var signal = JSON.parse(message);
 
     if (formId !== socketIdRef.current) {
       if (signal.sdp) {
@@ -252,7 +252,7 @@ export default function VideoMeet() {
       socketRef.current.on("user-left", (id) => {
         setVideos((videos) => videos.filter((video) => video.socketId !== id));
       });
-      socketRef.current.on("user-joinde", (id, client) => {
+      socketRef.current.on("user-joined", (id, client) => {
         console.log("userJoined", id, client);
 
         client.forEach((socketListId) => {
@@ -261,7 +261,8 @@ export default function VideoMeet() {
               peerConfigConnections
             );
             connections[socketListId].onicecandidate = (event) => {
-              if (event.candidate != null) {
+              console.log("ice candidate", event.candidate);
+              if (event.candidate) {
                 socketRef.current.emit(
                   "signal",
                   socketListId,
@@ -271,7 +272,7 @@ export default function VideoMeet() {
             };
           }
           // ADDING STREAM
-          connections[socketListId].onaddstream = (event) => {
+          connections[socketListId].ontrack = (event) => {
             console.log("stream added for socket id:", socketListId);
 
             let videoExists = videoRef.current.find(
@@ -279,19 +280,20 @@ export default function VideoMeet() {
             );
 
             if (videoExists) {
+              console.log("found exixts");
               setVideos((videos) => {
-                const updatedVide = videos.map((video) => {
+                const updatedVide = videos.map((video) =>
                   video.socketId === socketListId
-                    ? { ...video, stream: event.stream }
-                    : video;
-                });
+                    ? { ...video, stream: event.streams[0] }
+                    : video
+                );
                 videoRef.current = updatedVide;
                 return updatedVide;
               });
             } else {
               let newVid = {
                 socketId: socketListId,
-                stream: event.stream,
+                stream: event.streams[0],
                 autoPlay: true,
                 playsinline: true,
               };
@@ -305,21 +307,24 @@ export default function VideoMeet() {
           };
           // AADING THE LOCAL VIDEO STREAM
           if (window.localStream !== undefined && window.localStream !== null) {
-            connections[socketListId].addStream(window.localStream);
+            window.localStream.getTracks().forEach((track) => {
+              connections[socketListId].addTrack(track, window.localStream);
+            });
           } else {
             //TODO BLACK-SILENCE
+
             // let black-silence
             let blackSilence = (...agrs) =>
               new MediaStream([black(...agrs), silence()]);
             window.localStream = blackSilence();
-            connections[socketListId].addStream(window.localStream);
+            connections[socketListId].addTrack(window.localStream);
           }
           if (id === socketIdRef.current) {
             for (let id2 in connections) {
               if (id2 === socketIdRef) continue;
 
               try {
-                connections[id2].addStream(window.localStream);
+                connections[id2].addTrack(window.localStream);
               } catch (e) {
                 console.log(e);
               }
