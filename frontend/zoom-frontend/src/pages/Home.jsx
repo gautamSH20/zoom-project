@@ -19,7 +19,7 @@ function Home() {
     <>
       <div className="navBar">
         <div style={{ display: "flex", alignItems: "center" }}>
-          <h2>Apna Video Call</h2>
+          <h2>IN-VIDEO Call</h2>
         </div>
 
         <div style={{ display: "flex", alignItems: "center" }}>
