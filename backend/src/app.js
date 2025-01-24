@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import { connectTo } from "./controllers/socketManger.js";
 import exp from "node:constants";
-import { mongoId } from "./secret.js";
+import { mongoId } from "./secret1.js";
 import userRoutes from "./routes/userRoutes.js";
 
 const app = express();
