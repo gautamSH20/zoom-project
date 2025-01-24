@@ -14,7 +14,11 @@ import ChatIcon from "@mui/icons-material/Chat";
 import styles from "../style/videoMeetcomponentStyle.module.css";
 import { useNavigate } from "react-router-dom";
 
-const server_url = "http://localhost:8000";
+const IS_PROD = true;
+
+const server_url = IS_PROD
+  ? "https://zoom-project-axug.onrender.com"
+  : "http://localhost:8000";
 
 var connections = {};
 
