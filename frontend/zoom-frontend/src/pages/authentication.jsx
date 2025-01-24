@@ -12,7 +12,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { AuthContext } from "../context/AuthContext.jsx";
 import { Snackbar } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
@@ -30,6 +30,7 @@ export default function Authentication() {
   const [open, setOpen] = React.useState(false);
 
   const { handleRegister, handleLogin } = React.useContext(AuthContext);
+  const navigate = useNavigate();
 
   let routeTo = useNavigate();
 
@@ -160,6 +161,17 @@ export default function Authentication() {
                 onClick={handleAuth}
               >
                 {formState === 0 ? "Login " : "Register"}
+              </Button>
+              <Button
+                type="button"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                onClick={() => {
+                  alert("put a randmon url above the orginal url");
+                }}
+              >
+                go to videomeet
               </Button>
             </Box>
           </Box>
