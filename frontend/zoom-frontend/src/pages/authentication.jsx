@@ -14,6 +14,8 @@ import { AuthContext } from "../context/AuthContext.jsx";
 import { Snackbar } from "@mui/material";
 import { Navigate, useNavigate } from "react-router-dom";
 
+const defaultTheme = createTheme();
+
 export default function Authentication() {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
