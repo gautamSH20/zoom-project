@@ -39,7 +39,7 @@ function Home() {
           <div>
             <h2>Providing Quality Video Call Just Like Quality Education</h2>
 
-            <div style={{ display: "flex", gap: "10px" }}>
+            <div style={{ display: "flex", gap: "10px" }} className="call">
               <TextField
                 onChange={(e) => setMeetingCode(e.target.value)}
                 id="outlined-basic"

@@ -4,7 +4,10 @@
   background-image: url("/background.png");
   background-repeat: no-repeat;
   background-size: cover;
+  background-position: center;
   color: aliceblue;
+  display: flex;
+  flex-direction: column;
 }
 .loadingContainer nav {
   margin-inline: 1.2rem;
@@ -48,6 +51,7 @@
 .loadingMainContainer div:nth-child(2) img {
   height: 70vh;
   width: auto;
+  max-width: 100%;
 }
 
 .navBar {
@@ -80,4 +84,34 @@
   width: 30vw;
   height: auto;
   border-radius: 20px;
+}
+
+@media (max-width: 768px) {
+  .loadingMainContainer {
+    flex-direction: column; /* Stack items vertically */
+    justify-content: center; /* Center content vertically */
+    align-items: center; /* Center content horizontally */
+    height: auto; /* Allow container to grow as needed */
+    padding-inline: 1rem; /* Reduce padding for smaller screens */
+  }
+
+  .loadingMainContainer div:nth-child(1) {
+    text-align: center; /* Center text */
+    font-size: 1.5rem; /* Reduce font size for mobile */
+  }
+
+  .loadingMainContainer div:nth-child(1) div[role="button"] {
+    margin: 1.9rem auto 0; /* Center button and add margin */
+  }
+
+  .loadingMainContainer div:nth-child(2) img {
+    height: auto; /* Allow image to scale */
+    max-height: 20vh; /* Limit image height */
+    width: 100%; /* Make image responsive */
+    margin-top: 1rem; /* Add space between content and image */
+  }
+
+  .call {
+    flex-direction: column;
+  }
 }

@@ -8,11 +8,6 @@ export default function LandingPage() {
         <div className="navHeader">
           <h2>IN-VIDEO Call</h2>
         </div>
-        <div className="navList">
-          <div className="nav1">Join as guest</div>
-          <div className="nav2">Register</div>
-          <div role="button">login</div>
-        </div>
       </nav>
 
       <div className="loadingMainContainer">
